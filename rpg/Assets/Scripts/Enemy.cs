@@ -57,4 +57,30 @@ public class Enemy : Character
             return Mathf.RoundToInt(base.Attack() * 1.5f); // Orcs sit stiprak bet lenak
         }
     }
+
+    public class Troll : Enemy
+    {
+        private const float healChance = 0.2f;
+        private const float healAmount = 0.3f;
+
+        private void Awake()
+        {
+            CharacterName = "Troll";
+            maxHealth = 150;
+        }
+
+        public override void TakeDamage(int damage)
+        {
+            base.TakeDamage(damage);
+
+            // Chance to heal when hit
+            if (Random.value < healChance && currentHealth > 0)
+            {
+                int heal = Mathf.RoundToInt(maxHealth * healAmount);
+                currentHealth = Mathf.Min(maxHealth, currentHealth + heal);
+                Debug.Log($"Troll regenerates {heal} health!");
+                UpdateHealthUI();
+            }
+        }
+    }
 }
