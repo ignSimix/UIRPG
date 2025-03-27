@@ -1,39 +1,60 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Character : MonoBehaviour
+public abstract class Character : MonoBehaviour
 {
-    public int health;
-    [SerializeField] private Weapon activeWeapon;
+    [SerializeField] protected int maxHealth = 100;
+    [SerializeField] protected int currentHealth;
+    [SerializeField] protected Weapon activeWeapon;
+    [SerializeField] protected bool shieldActive = false;
+    [SerializeField] protected float shieldDurability = 100f;
 
-    public Weapon ActiveWeapon
+    public int CurrentHealth
     {
-        get { return activeWeapon; }
+        get { return currentHealth; }
+        protected set { currentHealth = Mathf.Clamp(value, 0, maxHealth); }
+    }
+
+    public bool IsShieldActive => shieldActive;
+    public float ShieldDurability => shieldDurability;
+
+    protected virtual void Start()
+    {
+        CurrentHealth = maxHealth;
     }
 
     public virtual int Attack()
     {
-        Debug.Log(name + " attacking!");
+        Debug.Log($"{name} attacks with {activeWeapon.WeaponName}!");
         return activeWeapon.GetDamage();
     }
 
-    public void GetHit(int damage)
+    public virtual void TakeDamage(int damage)
     {
-        health -= damage;
-        Debug.Log(name + " current health: " + health);
+        if (shieldActive)
+        {
+            float reducedDamage = damage * 0.5f;
+            CurrentHealth -= Mathf.RoundToInt(reducedDamage);
+            shieldDurability -= damage;
 
+            if (shieldDurability <= 0)
+            {
+                shieldActive = false;
+                Debug.Log($"{name}'s shield broke!");
+            }
+        }
+        else
+        {
+            CurrentHealth -= damage;
+        }
+
+        Debug.Log($"{name} took {damage} damage. Health: {CurrentHealth}");
     }
-    public void Shout()
+
+    public void ToggleShield(bool activate)
     {
-        Debug.Log("I am " + name.ToUpper());
+        shieldActive = activate;
+        Debug.Log($"{name} shield: {(activate ? "activated" : "deactivated")}");
     }
 
-    public void GetHit(Weapon weapon)
-    {
-        health -= weapon.GetDamage();
-        Debug.Log("Got hiy by: " + weapon.name);
-        Debug.Log(name + " current health: " + health);
-    }
-
+    public bool IsDead => CurrentHealth <= 0;
 }

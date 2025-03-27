@@ -1,9 +1,9 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Spear", menuName = "Weapons/Spear")]
-public class Spear : Weapon
+[CreateAssetMenu(fileName = "New Wooden Club", menuName = "Weapons/Wooden Club")]
+public class WoodenClub : Weapon
 {
-    [SerializeField] private int armorPierce = 8;
+    [SerializeField] private int armorPierce = 1;
 
     public override int GetDamage()
     {
