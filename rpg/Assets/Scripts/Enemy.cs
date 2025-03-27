@@ -30,7 +30,6 @@ public class BerserkerEnemy : Enemy
 
     public override void SpecialAbility()
     {
-        // Berserkers heal slightly when they attack
         CurrentHealth += 5;
         Debug.Log($"{name} heals from bloodlust!");
     }
@@ -42,7 +41,6 @@ public class MageEnemy : Enemy
 
     public override int Attack()
     {
-        // 50% chance to use magic attack
         if (Random.value > 0.5f)
         {
             Debug.Log($"{name} casts a spell!");
@@ -53,7 +51,6 @@ public class MageEnemy : Enemy
 
     public override void SpecialAbility()
     {
-        // Mages can summon a temporary shield
         ToggleShield(true);
         shieldDurability = 30f;
         Debug.Log($"{name} summons a magical barrier!");

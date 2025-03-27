@@ -12,15 +12,13 @@ public class BeserkerEnemy : Enemy
 
     public override void SpecialAbility()
     {
-        // Berserker's special ability: Enter a rage that increases damage but lowers defense
         aggressionLevel += 2;
-        shieldActive = false; // Berserkers can't use shields when raging
+        shieldActive = false;
         Debug.Log($"{name} enters a berserker rage! Damage increased but defense lowered.");
     }
 
     public override void TakeDamage(int damage)
     {
-        // Berserkers take more damage when their health is low but deal more damage
         if (CurrentHealth < maxHealth / 2)
         {
             damage = Mathf.RoundToInt(damage * 1.5f);
